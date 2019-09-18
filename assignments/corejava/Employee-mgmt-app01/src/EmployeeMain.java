@@ -11,8 +11,6 @@ public class EmployeeMain extends EmployeeService {
 		emplist.put(2,new Employee(2,"manish",19,"GBS","eng","USA"));
 		emplist.put(3,new Employee(3,"nikhil",20,"GBC","CEO","India"));
 		
-
-
 		int option = 0;
 		
 		while(option!=6) {

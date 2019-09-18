@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class EmployeeService  {
-	
-	
 	public static void add(HashMap<Integer,Employee> emplist) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter empId-");
