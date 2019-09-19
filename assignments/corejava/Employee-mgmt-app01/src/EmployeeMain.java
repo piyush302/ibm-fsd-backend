@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class EmployeeMain extends EmployeeService {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, NoIdException {
 		// TODO Auto-generated method stub
 		HashMap<Integer,Employee> emplist = new HashMap<>(); 
 		emplist.put(1,new Employee(1,"chandan",22,"GBS","eng","India"));
@@ -17,6 +17,7 @@ public class EmployeeMain extends EmployeeService {
 		System.out.println("Menu -");
 		System.out.println("1- Add Employee\n2- View Employee\n3- Update Employee\n4- Delete Employee\n5- View All Employees");
 		System.out.print("6- Exit\nEnter Your Option-");
+		System.out.println("\n\n");
 		Scanner sc = new Scanner(System.in);
 		option = sc.nextInt();
 		

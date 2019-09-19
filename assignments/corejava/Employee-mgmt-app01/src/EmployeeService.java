@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
 
 public class EmployeeService  {
 	static Map<Integer, Employee> emplist1;
+	static int id1;
 	public class MyCallable implements Callable<Employee> {
 
 		@Override
@@ -44,6 +45,8 @@ public class EmployeeService  {
 			        emplist1.put(id,e2);
 			    }
 	        	
+	        }catch(FileNotFoundException e){
+	        	System.out.println("Import file is not found");
 	        } finally {
 	            if (input != null) {
 	            	input.close();
@@ -54,68 +57,234 @@ public class EmployeeService  {
 		
 	}
 	
-	public static void add(HashMap<Integer,Employee> emplist) {
-		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter empId-");
-		int id=sc.nextInt();
-		System.out.print("Enter name-");
-		String name = sc.next();
-		System.out.print("Enter age-");
-		int age = sc.nextInt();
-		System.out.print("Enter dept-");
-		String dept = sc.next();
-		System.out.print("Enter desgn-");
-		String desgn = sc.next();
-		System.out.print("Enter country-");
-		String country = sc.next();
-		emplist.put(id,new Employee(id,name,age,dept,desgn,country));
+	
+	public class UpdadeEmployee implements Callable<Employee> {
+		@Override
+		public Employee call() throws Exception {
+			try {
+					if(emplist1.get(id1)==null) {
+						throw new NoIdException();
+					}
+					else {
+						int id=id1;
+						emplist1.remove(id);
+				        Scanner sc = new Scanner(System.in);
+						System.out.print("Enter modified name-");
+						String name = sc.next();
+						System.out.print("Enter modified age-");
+						int age = sc.nextInt();
+						System.out.print("Enter modified dept-");
+						String dept = sc.next();
+						System.out.print("Enter modified desgn-");
+						String desgn = sc.next();
+						System.out.print("Enter modified country-");
+						String country = sc.next();
+						emplist1.put(id,new Employee(id,name,age,dept,desgn,country));
+						System.out.println("The required employee details have been updated");	
+					}
+					}catch(NoIdException ex) {}
+			
+			return null;
+		}
+	}
+	
+	 public class AddEmployee implements Callable<Employee> {
+		@Override
+		public Employee call() throws Exception {
+			Scanner sc = new Scanner(System.in);
+			System.out.print("Enter empId-");
+			int id=sc.nextInt();
+			try {if(emplist1.get(id)!=null) {
+				throw new IdAlreadyException();
+			}
+			else {
+				System.out.print("Enter name-");
+				String name = sc.next();
+				System.out.print("Enter age-");
+				int age = sc.nextInt();
+				System.out.print("Enter dept-");
+				String dept = sc.next();
+				System.out.print("Enter desgn-");
+				String desgn = sc.next();
+				System.out.print("Enter country-");
+				String country = sc.next();
+				emplist1.put(id,new Employee(id,name,age,dept,desgn,country));	
+			}
+			}catch(IdAlreadyException ex) {}
+			return null;
+		}
+	}
+	 
+	 public class ViewEmployee implements Callable<Employee> {
+		@Override
+		public Employee call() throws Exception {
+			try {if(emplist1.get(id1)==null) {
+				throw new NoIdException();
+			}
+			else {
+				System.out.println("\n");
+				System.out.println("The details-");
+				System.out.println("\n");
+				System.out.println(emplist1.get(id1));
+				System.out.println("\n");
+			}
+			}catch(NoIdException ex) {}
+			return null;
+		}
+	}
+	 
+	 
+	 public class ViewAllEmployee implements Callable<Employee> {
+		@Override
+		public Employee call() throws Exception {
+			System.out.println("\n");
+			System.out.println("Details of all Employees-");
+			for (Employee e : emplist1.values())  
+	            System.out.println(e);
+			System.out.println("\n");
+			return null;
+		}
+	}
+	 
+	 public class DeleteEmployee implements Callable<Employee> {
+			@Override
+			public Employee call() throws Exception {
+				System.out.print("Enter the empId-");
+				Scanner sc = new Scanner(System.in);
+				int id = sc.nextInt();
+				try {
+					if(emplist1.get(id)==null) {
+						throw new NoIdException();
+					}
+					else {
+						emplist1.remove(id);
+						System.out.println("The required employee details have been deleted");
+					}
+					}catch(NoIdException ex) {
+						
+					}
+				return null;
+			}
+		}
+	 
+	 
+	 public class ExEmployee implements Callable<Employee> {
+			@Override
+			public Employee call() throws Exception {
+				FileWriter writer = new FileWriter("C:\\Users\\PiyushDarshan\\Documents\\output2.txt");
+				try { 
+					for(Employee str: emplist1.values()) {
+					  writer.write(str + "\n");
+					}						
+				} 
+				catch (NullPointerException e) {
+				}finally {
+					writer.close();
+				}
+				return null;
+			}
+		}
+	 
+	 
+	 
+	 
+	
+	public static void add(HashMap<Integer,Employee> emplist){
 		
+		emplist1 = emplist;
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new AddEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
+		
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
 		
 		
 	}
 	
 	public static void view(int id,HashMap<Integer,Employee> emplist) {
-		System.out.println("The details-");
-		System.out.println(emplist.get(id));	
+		emplist1 = emplist;
+		id1=id;	
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new ViewEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
+		
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
+
+
 	}
 	
 	public static void viewAll(HashMap<Integer,Employee> emplist) {
-		System.out.println("Details of all Employees-");
-		for (Employee e : emplist.values())  
-            System.out.println(e);
+		emplist1 = emplist;
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new ViewAllEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
+		
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
 	}
 	
 	public static void delete(HashMap<Integer,Employee> emplist) {
-		System.out.print("Enter the empId-");
-		Scanner sc = new Scanner(System.in);
-		int id = sc.nextInt();
-		emplist.remove(id);
-		System.out.println("The required employee details have been deleted");
-						
+		emplist1 = emplist;
+		
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new DeleteEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
+		
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
 	}
 	
 	public static void update(int id,HashMap<Integer,Employee> emplist) {
-		int id1=id;
-		emplist.remove(id);
-        Scanner sc = new Scanner(System.in);
-		System.out.print("Enter modified name-");
-		String name = sc.next();
-		System.out.print("Enter modified age-");
-		int age = sc.nextInt();
-		System.out.print("Enter modified dept-");
-		String dept = sc.next();
-		System.out.print("Enter modified desgn-");
-		String desgn = sc.next();
-		System.out.print("Enter modified country-");
-		String country = sc.next();
-		emplist.put(id1,new Employee(id1,name,age,dept,desgn,country));
+		emplist1 = emplist;
+		id1=id;		
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new UpdadeEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
 		
-
-		System.out.println("The required employee details have been updated");
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
+		
 						
 	}
 		
-	public static void importEmployee(HashMap<Integer,Employee> emplist) throws FileNotFoundException {
+	public static void importEmployee(HashMap<Integer,Employee> emplist) {
 		emplist1 = emplist;
 		
 		EmployeeService eg = new EmployeeService();
@@ -125,22 +294,22 @@ public class EmployeeService  {
 	}
 	
 	public static void exportEmployee(HashMap<Integer,Employee> emplist) throws IOException {
-		FileWriter writer = new FileWriter("C:\\Users\\PiyushDarshan\\Documents\\output2.txt");
-		try { 
-			for(Employee str: emplist.values()) {
-			  writer.write(str + "\n");
-			}						
-		} 
-		catch (NullPointerException e) {
-		}finally {
-			writer.close();
-		}
+		emplist1 = emplist;
+		EmployeeService e1 = new EmployeeService();
+		Callable<Employee> c2 = e1.new ExEmployee();
+		ExecutorService e = Executors.newFixedThreadPool(5);
+		Future<Employee> f = e.submit(c2);
+		
+		
+			while(!f.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e2) {
+					e2.printStackTrace();
+				}
+			}
 
 
 	}
 
-	
-	
-		
-	
 }
