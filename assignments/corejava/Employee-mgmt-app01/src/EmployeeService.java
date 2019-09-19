@@ -8,9 +8,52 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class EmployeeService  {
+	static Map<Integer, Employee> emplist1;
+	public class MyCallable implements Callable<Employee> {
+
+		@Override
+		public Employee call() throws Exception {
+	        Scanner input = null;
+	        try {
+	        	System.out.println("hello piyush");
+	        	
+	        	
+	        	input = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream
+						 ("C:\\Users\\PiyushDarshan\\Documents\\piyush.txt"))));
+			    input.useDelimiter(",|\n");
+
+			    
+			    while(input.hasNext()) {
+			        int id = input.nextInt();
+			        String name = input.next();
+			        int age = input.nextInt();
+			        String department = input.next();
+			        String desgn = input.next();			        
+			        String country = input.next();
+
+			        Employee e2 = new Employee(id,name, age, department, desgn, country);
+			        emplist1.put(id,e2);
+			    }
+	        	
+	        } finally {
+	            if (input != null) {
+	            	input.close();
+	            }
+	        }
+			return null;
+		}
+		
+	}
+	
 	public static void add(HashMap<Integer,Employee> emplist) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter empId-");
@@ -73,40 +116,19 @@ public class EmployeeService  {
 	}
 		
 	public static void importEmployee(HashMap<Integer,Employee> emplist) throws FileNotFoundException {
-        Scanner input = null;
-        
-        try {
-        	
-        	
-        	input = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream
-					 ("C:\\Users\\PiyushDarshan\\Documents\\piyush.txt"))));
-		    input.useDelimiter(",|\n");
-
-		    
-		    while(input.hasNext()) {
-		        int id = input.nextInt();
-		        String name = input.next();
-		        int age = input.nextInt();
-		        String department = input.next();
-		        String desgn = input.next();			        
-		        String country = input.next();
-
-		        Employee e2 = new Employee(id,name, age, department, desgn, country);
-		        emplist.put(id,e2);
-		    }
-        	
-        } finally {
-            if (input != null) {
-            	input.close();
-            }
-        }
+		emplist1 = emplist;
+		
+		EmployeeService eg = new EmployeeService();
+		Callable<Employee> c1 = eg.new MyCallable();
+		ExecutorService e = Executors.newFixedThreadPool(1);
+		e.submit(c1);	
 	}
 	
 	public static void exportEmployee(HashMap<Integer,Employee> emplist) throws IOException {
 		FileWriter writer = new FileWriter("C:\\Users\\PiyushDarshan\\Documents\\output2.txt");
 		try { 
 			for(Employee str: emplist.values()) {
-			  writer.write(str + System.lineSeparator());
+			  writer.write(str + "\n");
 			}						
 		} 
 		catch (NullPointerException e) {
