@@ -31,7 +31,6 @@ public class EmployeeService  {
 	        	input = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream
 						 ("C:\\Users\\PiyushDarshan\\Documents\\piyush.txt"))));
 			    input.useDelimiter(",|\n");
-
 			    
 			    while(input.hasNext()) {
 			        int id = input.nextInt();
@@ -225,8 +224,6 @@ public class EmployeeService  {
 					e2.printStackTrace();
 				}
 			}
-
-
 	}
 	
 	public static void viewAll(HashMap<Integer,Employee> emplist) {

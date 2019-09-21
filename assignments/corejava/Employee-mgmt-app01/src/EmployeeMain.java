@@ -16,7 +16,7 @@ public class EmployeeMain extends EmployeeService {
 		while(option!=6) {
 		System.out.println("Menu -");
 		System.out.println("1- Add Employee\n2- View Employee\n3- Update Employee\n4- Delete Employee\n5- View All Employees");
-		System.out.print("6- Exit\nEnter Your Option-");
+		System.out.print("6- Import Employee\n7- Export Employee\n8- Exit\nEnter Your Option-");
 		System.out.println("\n\n");
 		Scanner sc = new Scanner(System.in);
 		option = sc.nextInt();
@@ -44,13 +44,13 @@ public class EmployeeMain extends EmployeeService {
 		if(option==5) {
 			viewAll(emplist);
 		}
-		if(option==6) {
+		if(option==8) {
 			break;
 		}
-		if(option==7) {
+		if(option==6) {
 			importEmployee(emplist);
 		}
-		if(option==8) {
+		if(option==7) {
 			exportEmployee(emplist);
 		}
 
