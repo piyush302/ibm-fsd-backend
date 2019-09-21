@@ -1,7 +1,6 @@
 
 public class NoIdException extends Exception {
 	
-	
 	public NoIdException() 
     { 
 		System.out.println("\n");

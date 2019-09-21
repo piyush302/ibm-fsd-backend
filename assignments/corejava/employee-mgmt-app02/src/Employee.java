@@ -5,6 +5,7 @@ int age;
 String dept;
 String desgn;
 String country;
+
 public Employee(int empId, String name, int age, String dept, String desgn, String country) {
 	super();
 	this.empId = empId;
