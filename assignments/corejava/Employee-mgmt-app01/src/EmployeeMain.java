@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
 public class EmployeeMain extends EmployeeService {
 
 	public static void main(String[] args) throws IOException, NoIdException {
