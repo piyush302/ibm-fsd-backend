@@ -8,3 +8,4 @@ public class NoIdException extends Exception {
 		System.out.println("\n");
     } 
 }
+
