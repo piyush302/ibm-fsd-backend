@@ -21,7 +21,6 @@ import java.sql.Statement;
 
 import javax.sql.RowSet;
 
-
 public class EmployeeConnection{
 	static Connection conn = null;
 	public static Connection startDatabase() throws SQLException {

@@ -2,7 +2,6 @@ package com.employee.exception;
 
 public class IdAlreadyException extends Exception {
 	
-	
 	public IdAlreadyException() 
     { 
 		System.out.println("\n");

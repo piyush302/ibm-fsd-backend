@@ -1,4 +1,5 @@
 package com.employee.model;
+
 public class Employee {
 int empId;
 String name;
